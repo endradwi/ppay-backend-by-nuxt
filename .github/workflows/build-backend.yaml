@@ -1,6 +1,6 @@
 name: Build Image
 run-name: Build and Publish Docker Image
-on: push
+on: [push]
 permissions:
   packages: write
 jobs:
