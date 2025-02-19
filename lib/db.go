@@ -12,22 +12,19 @@ import (
 func DB() *pgx.Conn {
 	godotenv.Load()
 
-	config, err := pgx.ParseConfig("")
+	connStr := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		os.Getenv("PGHOST"),
+		os.Getenv("PGPORT"),
+		os.Getenv("PGUSER"),
+		os.Getenv("PGPASSWORD"),
+		os.Getenv("PGDATABASE"),
+	)
+
+	conn, err := pgx.Connect(context.Background(), connStr)
 	if err != nil {
-		fmt.Println(err)
-	}
-	conn, err := pgx.Connect(context.Background(), config.ConnString())
-	if err != nil {
-		fmt.Println()
+		fmt.Println("Error connecting to database:", err)
 	}
 
-	config.Host = os.Getenv("PGHOST")
-	config.Port = 5432
-	config.User = os.Getenv("PGUSER")
-	config.Password = os.Getenv("PGPASSWORD")
-	config.Database = os.Getenv("PGDATABASE")
-	config.RuntimeParams = map[string]string{
-		"sslmode": "disable",
-	}
 	return conn
 }
