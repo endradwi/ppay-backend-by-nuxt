@@ -3,6 +3,7 @@ package lib
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
@@ -10,10 +11,7 @@ import (
 
 func DB() *pgx.Conn {
 	godotenv.Load()
-	// connstring := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"),
-	// 	os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_DB"))
-	// conn, _ := pgx.Connect(context.Background(), connstring)
-	// conn, _ := pgx.Connect(context.Background(), connstring)
+
 	config, err := pgx.ParseConfig("")
 	if err != nil {
 		fmt.Println(err)
@@ -21,6 +19,15 @@ func DB() *pgx.Conn {
 	conn, err := pgx.Connect(context.Background(), config.ConnString())
 	if err != nil {
 		fmt.Println()
+	}
+
+	config.Host = os.Getenv("PGHOST")
+	config.Port = 5432
+	config.User = os.Getenv("PGUSER")
+	config.Password = os.Getenv("PGPASSWORD")
+	config.Database = os.Getenv("PGDATABASE")
+	config.RuntimeParams = map[string]string{
+		"sslmode": "disable",
 	}
 	return conn
 }
