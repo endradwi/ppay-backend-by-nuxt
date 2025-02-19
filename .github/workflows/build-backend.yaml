@@ -24,4 +24,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run containers
         run: |
-          docker-compose up -d --build
+          docker-compose up -d
