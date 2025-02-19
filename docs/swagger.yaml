@@ -1,0 +1,636 @@
+basePath: /
+definitions:
+  controllers.Response:
+    properties:
+      message:
+        type: string
+      page_info: {}
+      results: {}
+      success:
+        type: boolean
+    type: object
+  models.GetAllMovie:
+    properties:
+      genre:
+        example: Action
+        type: string
+      id:
+        type: integer
+      image:
+        example: Spiderman.jpg
+        type: string
+      tittle:
+        example: Spiderman
+        type: string
+    type: object
+  models.Movie_body:
+    properties:
+      actors:
+        type: string
+      author:
+        type: string
+      duration:
+        type: string
+      genre:
+        example: Action
+        type: string
+      id:
+        type: integer
+      image:
+        example: Spiderman.jpg
+        type: string
+      release_date:
+        type: string
+      synopsis:
+        example: film action universal
+        type: string
+      tag:
+        description: |-
+          Release_date time.Time `json:"release_date" form:"release_date"`
+          Duration     time.Time `json:"duration" form:"duration"`
+        type: string
+      tittle:
+        example: Spiderman
+        type: string
+    type: object
+  models.MoviesCinema:
+    properties:
+      cinema:
+        type: string
+      cinema_date:
+        type: string
+      cinema_location:
+        type: string
+      cinema_time:
+        type: string
+      genre:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      tittle:
+        type: string
+    type: object
+  models.MoviesNoTag:
+    properties:
+      actors:
+        type: string
+      author:
+        type: string
+      duration:
+        type: string
+      genre:
+        example: Action
+        type: string
+      id:
+        type: integer
+      image:
+        example: Spiderman.jpg
+        type: string
+      release_date:
+        type: string
+      synopsis:
+        example: film action universal
+        type: string
+      tittle:
+        example: Spiderman
+        type: string
+    type: object
+  models.MoviesbyTag:
+    properties:
+      actors:
+        type: string
+      author:
+        type: string
+      genre:
+        example: Action
+        type: string
+      id:
+        type: integer
+      image:
+        example: Spiderman.jpg
+        type: string
+      synopsis:
+        example: film action universal
+        type: string
+      tag:
+        description: |-
+          Release_date time.Time `json:"release_date" form:"release_date"`
+          Duration     time.Time `json:"duration" form:"duration"`
+        type: string
+      tittle:
+        example: Spiderman
+        type: string
+    type: object
+  models.Profile:
+    properties:
+      email:
+        example: salah@mail.com
+        type: string
+      first_name:
+        example: Salah
+        type: string
+      id:
+        type: integer
+      image:
+        example: salah.jpg
+        type: string
+      last_name:
+        example: Alaudin
+        type: string
+      password:
+        example: Salah1!
+        type: string
+      phone_number:
+        type: string
+    type: object
+  models.UserAdmin:
+    properties:
+      email:
+        example: salah@mail.com
+        type: string
+      first_name:
+        example: Salah
+        type: string
+      id:
+        type: integer
+      image:
+        example: salah.jpg
+        type: string
+      last_name:
+        example: Alaudin
+        type: string
+      password:
+        example: Salah1!
+        type: string
+      phone_number:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Profile server
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Login Account
+      parameters:
+      - description: Input Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Input Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Registrasi Account
+      parameters:
+      - description: Input Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Input Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      tags:
+      - Auth
+  /movies:
+    get:
+      consumes:
+      - application/json
+      description: Get All Movie
+      parameters:
+      - description: Search Movie
+        in: query
+        name: search
+        type: string
+      - description: Page Movie
+        in: query
+        name: page
+        type: integer
+      - description: Limit Movie
+        in: query
+        name: limit
+        type: integer
+      - description: Sort Movie
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.GetAllMovie'
+                  type: array
+              type: object
+      summary: Movies
+      tags:
+      - Movies
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add Movies
+      parameters:
+      - description: Edit tittle
+        in: formData
+        name: tittle
+        required: true
+        type: string
+      - description: Update genre
+        in: formData
+        name: genre
+        required: true
+        type: string
+      - description: Update Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Update Synopsis
+        in: formData
+        name: synopsis
+        required: true
+        type: string
+      - description: Update Author
+        in: formData
+        name: author
+        required: true
+        type: string
+      - description: Update Actors
+        in: formData
+        name: actors
+        required: true
+        type: string
+      - description: Update Realease Date
+        in: formData
+        name: release_date
+        required: true
+        type: string
+      - description: Update Duration
+        in: formData
+        name: duration
+        required: true
+        type: string
+      - description: Update Tag
+        in: formData
+        name: tag
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.MoviesbyTag'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Movies
+  /movies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Movies
+      parameters:
+      - description: Delete Movie
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.MoviesbyTag'
+              type: object
+      tags:
+      - Movies
+    get:
+      consumes:
+      - application/json
+      description: Detail Movies
+      parameters:
+      - description: Detail Movie
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.MoviesNoTag'
+              type: object
+      tags:
+      - Movies
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Edit Movies
+      parameters:
+      - description: Id Movie
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Edit tittle
+        in: formData
+        name: tittle
+        required: true
+        type: string
+      - description: Update genre
+        in: formData
+        name: genre
+        required: true
+        type: string
+      - description: Update Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Update Synopsis
+        in: formData
+        name: synopsis
+        required: true
+        type: string
+      - description: Update Author
+        in: formData
+        name: author
+        required: true
+        type: string
+      - description: Update Actors
+        in: formData
+        name: actors
+        required: true
+        type: string
+      - description: Update Realease Date
+        in: formData
+        name: release_date
+        required: true
+        type: string
+      - description: Update Duration
+        in: formData
+        name: duration
+        required: true
+        type: string
+      - description: Update Tag
+        in: formData
+        name: tag
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.Movie_body'
+              type: object
+      tags:
+      - Movies
+  /orders/cinema/{id}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Add Choose Cinema tikers
+      parameters:
+      - description: Select Movie Tiket
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Search Date Cinema
+        in: query
+        name: searchDate
+        required: true
+        type: string
+      - description: Search Time Cinema
+        in: query
+        name: searchTime
+        required: true
+        type: string
+      - description: Search Location Cinema
+        in: query
+        name: searchLocation
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.MoviesCinema'
+              type: object
+      tags:
+      - Order Tiket
+  /profile:
+    delete:
+      consumes:
+      - application/json
+      description: Delete profiles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.Profile'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Profile
+      tags:
+      - Profile
+    get:
+      consumes:
+      - application/json
+      description: Get Profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.Profile'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Profile
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Update Movies
+      parameters:
+      - description: Update First Name
+        in: formData
+        name: first_name
+        required: true
+        type: string
+      - description: Update Last Name
+        in: formData
+        name: last_name
+        required: true
+        type: string
+      - description: Update Phone_Number
+        in: formData
+        name: phone_number
+        required: true
+        type: string
+      - description: Update Image
+        in: formData
+        name: image
+        type: file
+      - description: Update Email
+        in: formData
+        name: email
+        type: string
+      - description: Update Password
+        in: formData
+        name: password
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.Profile'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Profile
+  /users:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add User
+      parameters:
+      - description: First Name User
+        in: formData
+        name: first_name
+        required: true
+        type: string
+      - description: Last Name User
+        in: formData
+        name: last_name
+        required: true
+        type: string
+      - description: Phone Number User
+        in: formData
+        name: phone_number
+        required: true
+        type: string
+      - description: Image User
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Email User
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password User
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                results:
+                  $ref: '#/definitions/models.UserAdmin'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: User
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
