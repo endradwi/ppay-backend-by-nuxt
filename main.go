@@ -28,5 +28,5 @@ func main() {
 	router.Static("/profile/image", "./upload/profile")
 	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	router.Run(":8888")
+	router.Run(":8886")
 }
