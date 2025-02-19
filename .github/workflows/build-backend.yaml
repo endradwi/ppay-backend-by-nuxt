@@ -1,8 +1,7 @@
 name: Build Image
 run-name: Build and Publish Docker Image
-on: [push]
+on: push
 permissions:
-  contents: read
   packages: write
 jobs:
   Build-And-Publish:
@@ -17,16 +16,12 @@ jobs:
           echo "PGDATABASE=${{ secrets.PGDATABASE }}" >> .env
           echo "PGUSER=${{ secrets.PGUSER }}" >> .env
           echo "PGPASSWORD=${{ secrets.PGPASSWORD }}" >> .env
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-      
-      - name: Build Docker Image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}/backend:latest .
-      
-      - name: Push Docker Image
-        run: |
-          docker push ghcr.io/${{ github.repository }}/backend:latest  
       - name: Run containers
         run: |
           docker-compose up -d
+      - name: Build and publish a Docker image for ${{ github.repository }}
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{ github.repository }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      
